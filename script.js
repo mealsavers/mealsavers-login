@@ -1,87 +1,53 @@
-// Firebase config — USE YOURS FROM FIREBASE CONSOLE
+// Firebase configuration
 const firebaseConfig = {
-  apiKey: "YOUR_API_KEY",
-  authDomain: "YOUR_PROJECT.firebaseapp.com",
-  projectId: "YOUR_PROJECT_ID",
-  appId: "YOUR_APP_ID"
+  apiKey: "AIzaSyAPB4C2DmnB193mynPKWwAwqKUnhzUeg0",
+  authDomain: "mealsavers-f5dbf.firebaseapp.com",
+  projectId: "mealsavers-f5dbf",
+  storageBucket: "mealsavers-f5dbf.appspot.com",
+  messagingSenderId: "254383045667",
+  appId: "1:254383045667:web:0c7c309e4661c78c8b8596",
+  measurementId: "G-CKMP2L4FB6"
 };
 
+// Initialize Firebase
 firebase.initializeApp(firebaseConfig);
-const auth = firebase.auth();
 
-let isLogin = true;
+// Handle login + sign-up toggle
+document.addEventListener("DOMContentLoaded", function () {
+  const switchText = document.getElementById("switch-text");
+  const nameField = document.getElementById("name");
+  const submitButton = document.getElementById("submit-button");
+  let isLogin = true;
 
-function toggleForm() {
-  isLogin = !isLogin;
-  document.getElementById('name').style.display = isLogin ? 'none' : 'block';
-  document.getElementById('confirm-password').style.display = isLogin ? 'none' : 'block';
-  document.getElementById('action-btn').textContent = isLogin ? 'Log In' : 'Sign Up';
-  document.getElementById('switch-text').textContent = isLogin
-    ? "Let’s log in and sniff out a Saver Sack."
-    : "Let’s get you a seat at the table!";
-}
-
-function togglePassword() {
-  const pw = document.getElementById('password');
-  pw.type = pw.type === 'password' ? 'text' : 'password';
-}
-
-function handleAuth() {
-  const email = document.getElementById('email').value;
-  const password = document.getElementById('password').value;
-  const message = document.getElementById('message');
-
-  if (isLogin) {
-    auth.signInWithEmailAndPassword(email, password)
-      .then(() => {
-        message.textContent = "Logged in! Grabbing your Saver Sacks...";
-      })
-      .catch(err => {
-        message.textContent = err.message;
-      });
-  } else {
-    const confirmPassword = document.getElementById('confirm-password').value;
-    if (password !== confirmPassword) {
-      message.textContent = "Passwords don’t match. No Saver Sack for you!";
-      return;
+  switchText.addEventListener("click", function () {
+    isLogin = !isLogin;
+    if (isLogin) {
+      nameField.style.display = "none";
+      submitButton.textContent = "Log In";
+      switchText.textContent = "Let’s log in and snatch a Saver Sack. 😎";
+    } else {
+      nameField.style.display = "block";
+      submitButton.textContent = "Sign Up";
+      switchText.textContent = "Already saved your first sack? Log back in!";
     }
+  });
 
-    auth.createUserWithEmailAndPassword(email, password)
-      .then((userCred) => {
-        userCred.user.sendEmailVerification();
-        message.textContent = "Account created! Check your email to verify.";
-      })
-      .catch(err => {
-        message.textContent = err.message;
-      });
-  }
-}
+  // Handle form submission
+  document.getElementById("login-form").addEventListener("submit", function (e) {
+    e.preventDefault();
+    const email = document.getElementById("email").value;
+    const password = document.getElementById("password").value;
 
-function resetPassword() {
-  const email = document.getElementById('email').value;
-  const message = document.getElementById('message');
+    if (isLogin) {
+      firebase.auth().signInWithEmailAndPassword(email, password)
+        .then(() => alert("Welcome back, Sack Saver!"))
+        .catch(error => alert("Login error: " + error.message));
+    } else {
+      const name = document.getElementById("name").value;
+      firebase.auth().createUserWithEmailAndPassword(email, password)
+        .then(() => alert(`Welcome aboard, ${name}! Time to rescue some meals.`))
+        .catch(error => alert("Signup error: " + error.message));
+    }
+  });
+});
 
-  if (!email) {
-    message.textContent = "Enter your email first, snack master.";
-    return;
-  }
-
-  auth.sendPasswordResetEmail(email)
-    .then(() => {
-      message.textContent = "Reset email sent. Check that inbox!";
-    })
-    .catch(err => {
-      message.textContent = err.message;
-    });
-}
-
-function googleLogin() {
-  const provider = new firebase.auth.GoogleAuthProvider();
-  auth.signInWithPopup(provider)
-    .then(() => {
-      document.getElementById('message').textContent = "Signed in with Google — welcome, genius!";
-    })
-    .catch(err => {
-      document.getElementById('message').textContent = err.message;
-    });
-}
