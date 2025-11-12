@@ -2,96 +2,149 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Meal Savers Login</title>
-  <link rel="stylesheet" href="style.css" />
-  <script defer src="script.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js"></script>
-
+  <link rel="stylesheet" href="styles.css" />
   <style>
     body {
-      font-family: 'Segoe UI', sans-serif;
-      text-align: center;
-      padding: 2rem;
-      background-color: #f8f8f8;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      min-height: 100vh;
+      margin: 0;
+      padding: 30px 10px;
+      background: #fdfdfd;
     }
+
     .logo {
-      width: 200px;
-      margin-bottom: 1rem;
+      width: 160px;
+      margin-bottom: 10px;
     }
-    .container {
-      background: #fff;
-      padding: 2rem;
-      max-width: 400px;
-      margin: auto;
-      border-radius: 10px;
-      box-shadow: 0 0 12px rgba(0, 0, 0, 0.1);
+
+    h1 {
+      margin: 0;
+      font-size: 24px;
     }
-    input, button {
-      width: 100%;
+
+    p {
+      margin-top: 4px;
+      margin-bottom: 30px;
+      font-size: 14px;
+      color: #555;
+    }
+
+    input {
+      width: 300px;
       padding: 12px;
       margin: 10px 0;
-      font-size: 16px;
+      font-size: 14px;
       border-radius: 5px;
       border: 1px solid #ccc;
+      display: block;
     }
-    .password-wrapper {
-      position: relative;
-    }
-    .toggle-password {
-      position: absolute;
-      right: 12px;
-      top: 50%;
-      transform: translateY(-50%);
+
+    button {
+      width: 300px;
+      padding: 12px;
+      margin-top: 10px;
+      background-color: #d62828;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      font-size: 16px;
       cursor: pointer;
     }
-    #submit-button {
-      background-color: #c62828;
-      color: white;
-      border: none;
+
+    button:hover {
+      background-color: #b91d1d;
     }
-    #google-login {
-      background-color: #4285F4;
-      color: white;
-      border: none;
+
+    .alt-actions {
+      margin-top: 12px;
+      font-size: 13px;
     }
-    a {
-      color: #0066cc;
+
+    .alt-actions a {
+      color: #007bff;
       text-decoration: none;
+      margin: 0 5px;
+    }
+
+    .google-btn {
+      background-color: #4285f4;
+      margin-top: 15px;
+    }
+
+    #switch-text {
+      color: #007bff;
+      font-size: 13px;
+      margin-top: 15px;
+      cursor: pointer;
+    }
+
+    .eye-icon {
+      position: relative;
+      left: -30px;
+      cursor: pointer;
+    }
+
+    .input-group {
+      position: relative;
+    }
+
+    .input-group input {
+      width: 100%;
+      box-sizing: border-box;
+    }
+
+    .input-group .eye-icon {
+      position: absolute;
+      top: 50%;
+      right: 12px;
+      transform: translateY(-50%);
+      font-size: 16px;
     }
   </style>
 </head>
 <body>
-  <div class="container">
-    <img src="https://mealsavers.net/assets/mealsavers-logo.png" alt="Meal Savers Logo" class="logo" />
 
-    <h1>Hey, Smart Saver <span>👋</span></h1>
-    <p>Let’s log in and sniff out a Saver Sack.</p>
+  <img src="https://i.postimg.cc/pX4FCR5m/mealsavers-net.png" alt="Meal Savers Logo" class="logo" />
 
-    <input type="text" id="name" placeholder="Your name" />
-    <input type="email" id="email" placeholder="Email" />
+  <h1>Hey, Smart Saver 👋</h1>
+  <p>Let’s log in and sniff out a Saver Sack.</p>
 
-    <div class="password-wrapper">
-      <input type="password" id="password" placeholder="Password" />
-      <span class="toggle-password" onclick="togglePassword()">👁️</span>
-    </div>
+  <input type="text" id="name" placeholder="Your name (for sign up only)" />
+  <input type="email" id="email" placeholder="Email" />
 
-    <input type="password" id="confirm-password" placeholder="Confirm Password" />
-
-    <button id="submit-button">Log In</button>
-
-    <p id="switch-text">New here? Create an account</p>
-    <p><a href="#">Forgot your password?</a></p>
-    <p>or</p>
-    <button id="google-login">Sign in with Google</button>
+  <div class="input-group">
+    <input type="password" id="password" placeholder="Password" />
+    <span class="eye-icon" onclick="togglePassword()">👁️</span>
   </div>
 
+  <input type="password" id="confirm-password" placeholder="Confirm Password (sign up only)" />
+
+  <button id="submit-button">Log In</button>
+
+  <div class="alt-actions">
+    <a href="#">New here? Create an account</a><br />
+    <a href="#">Forgot your password?</a>
+  </div>
+
+  <button class="google-btn">Sign in with Google</button>
+
+  <div id="switch-text">Already saved your first sack? Log back in!</div>
+
+  <script src="firebase-config.js"></script>
+  <script src="script.js"></script>
   <script>
     function togglePassword() {
-      const input = document.getElementById("password");
-      input.type = input.type === "password" ? "text" : "password";
+      const passField = document.getElementById("password");
+      passField.type = passField.type === "password" ? "text" : "password";
     }
   </script>
+
 </body>
 </html>
+
