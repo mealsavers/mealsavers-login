@@ -1,6 +1,6 @@
-// Line 1: Firebase config
+// Firebase configuration
 const firebaseConfig = {
-  apiKey: "AIzaSyAP84C2DmnB193myPKhWwAwqKUhnzUeg0",
+  apiKey: "AIzaSyAP84C2DmnB193myPkWWAwqUKnhzUeg0",
   authDomain: "mealsavers-f5dbf.firebaseapp.com",
   projectId: "mealsavers-f5dbf",
   storageBucket: "mealsavers-f5dbf.appspot.com",
@@ -9,14 +9,14 @@ const firebaseConfig = {
   measurementId: "G-CXMP2L4FB6"
 };
 
-// Line 12: Initialize Firebase
+// Initialize Firebase
 firebase.initializeApp(firebaseConfig);
 
-// Line 15: Setup toggle & button behavior
+// Handle login + sign-up toggle
 document.addEventListener("DOMContentLoaded", function () {
   const switchText = document.getElementById("switch-text");
   const nameField = document.getElementById("name");
-  const confirmPassword = document.getElementById("confirm-password");
+  const confirmPasswordField = document.getElementById("confirm-password");
   const submitButton = document.getElementById("submit-button");
   let isLogin = true;
 
@@ -24,23 +24,25 @@ document.addEventListener("DOMContentLoaded", function () {
     isLogin = !isLogin;
     if (isLogin) {
       nameField.style.display = "none";
-      confirmPassword.style.display = "none";
+      confirmPasswordField.style.display = "none";
       submitButton.textContent = "Log In";
       switchText.textContent = "New here? Create an account";
     } else {
       nameField.style.display = "block";
-      confirmPassword.style.display = "block";
+      confirmPasswordField.style.display = "block";
       submitButton.textContent = "Sign Up";
-      switchText.textContent = "Already saved your first sack? Log back in 😎";
+      switchText.textContent = "Already saved your first sack? Log back in!";
     }
   });
 
-  submitButton.addEventListener("click", function (e) {
-    e.preventDefault();
-    if (isLogin) {
-      alert("Logging in... (Firebase logic coming next)");
-    } else {
-      alert("Signing up... (Firebase logic coming next)");
-    }
+  // Show fields correctly on load
+  if (isLogin) {
+    nameField.style.display = "none";
+    confirmPasswordField.style.display = "none";
+  }
+
+  // Button click handler (not wired up to Firebase Auth yet)
+  submitButton.addEventListener("click", function () {
+    alert("Your script is working!");
   });
 });
