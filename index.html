@@ -8,6 +8,59 @@
   <script defer src="script.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js"></script>
+
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      text-align: center;
+      padding: 2rem;
+      background-color: #f8f8f8;
+    }
+    .logo {
+      width: 200px;
+      margin-bottom: 1rem;
+    }
+    .container {
+      background: #fff;
+      padding: 2rem;
+      max-width: 400px;
+      margin: auto;
+      border-radius: 10px;
+      box-shadow: 0 0 12px rgba(0, 0, 0, 0.1);
+    }
+    input, button {
+      width: 100%;
+      padding: 12px;
+      margin: 10px 0;
+      font-size: 16px;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+    }
+    .password-wrapper {
+      position: relative;
+    }
+    .toggle-password {
+      position: absolute;
+      right: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      cursor: pointer;
+    }
+    #submit-button {
+      background-color: #c62828;
+      color: white;
+      border: none;
+    }
+    #google-login {
+      background-color: #4285F4;
+      color: white;
+      border: none;
+    }
+    a {
+      color: #0066cc;
+      text-decoration: none;
+    }
+  </style>
 </head>
 <body>
   <div class="container">
@@ -16,28 +69,28 @@
     <h1>Hey, Smart Saver <span>👋</span></h1>
     <p>Let’s log in and sniff out a Saver Sack.</p>
 
-    <input type="text" id="name" placeholder="Your name (for sign up only)" />
+    <input type="text" id="name" placeholder="Your name" />
     <input type="email" id="email" placeholder="Email" />
-    
+
     <div class="password-wrapper">
       <input type="password" id="password" placeholder="Password" />
       <span class="toggle-password" onclick="togglePassword()">👁️</span>
     </div>
 
-    <input type="password" id="confirm-password" placeholder="Confirm Password (sign up only)" />
+    <input type="password" id="confirm-password" placeholder="Confirm Password" />
 
     <button id="submit-button">Log In</button>
 
     <p id="switch-text">New here? Create an account</p>
     <p><a href="#">Forgot your password?</a></p>
-    <hr />
+    <p>or</p>
     <button id="google-login">Sign in with Google</button>
   </div>
 
   <script>
     function togglePassword() {
-      const passwordInput = document.getElementById("password");
-      passwordInput.type = passwordInput.type === "password" ? "text" : "password";
+      const input = document.getElementById("password");
+      input.type = input.type === "password" ? "text" : "password";
     }
   </script>
 </body>
