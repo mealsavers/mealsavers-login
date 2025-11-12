@@ -19,11 +19,28 @@
     p {
       font-size: 1.2em;
     }
+    #logout-btn {
+      margin-top: 20px;
+      padding: 10px 20px;
+      font-size: 1em;
+      background-color: #d9534f;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    #logout-btn:hover {
+      background-color: #c9302c;
+    }
   </style>
+  <script type="module" src="firebase-config.js"></script>
+  <script type="module" src="home.js"></script>
 </head>
 <body>
-  <h1>Welcome to Meal Savers! 🥳</h1>
+  <h1>Welcome to Meal Savers! 🥄</h1>
   <p>You’re officially in the club. Go sniff out some Saver Sacks.</p>
-  <p>🥡💰🌎</p>
+  <p>🐶🥡🍴🛍️</p>
+  <p id="user-info">Checking login...</p>
+  <button id="logout-btn">Log Out</button>
 </body>
 </html>
