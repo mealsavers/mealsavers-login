@@ -1,31 +1,33 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Meal Savers - Profile Setup</title>
-  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
   <div class="container">
-    <h2>Let's Get to Know You 🍽️</h2>
-    <p>We're building your Saver Sack radar. Help us make it awesome!</p>
+    <h2>Let’s Get to Know You 🍽️</h2>
+    <p>We promise not to text you weird food puns. (Okay, maybe just a few.)</p>
+
     <form id="profile-form">
-      <label for="firstName">First Name*</label>
-      <input type="text" id="firstName" name="firstName" placeholder="Your first name" required>
+      <label for="firstName">First Name</label>
+      <input type="text" id="firstName" placeholder="Tasty" required>
 
-      <label for="lastName">Last Name*</label>
-      <input type="text" id="lastName" name="lastName" placeholder="Last name, not last meal" required>
+      <label for="lastName">Last Name</label>
+      <input type="text" id="lastName" placeholder="McSaver" required>
 
-      <label for="email">Email*</label>
-      <input type="email" id="email" name="email" disabled>
+      <label for="email">Email</label>
+      <input type="email" id="email" readonly>
 
-      <label for="zipCode">Zip Code*</label>
-      <input type="text" id="zipCode" name="zipCode" placeholder="Where the snacks live" required pattern="\d{5}">
+      <label for="zipCode">ZIP Code</label>
+      <input type="text" id="zipCode" placeholder="12345" required>
 
-      <label for="birthMonth">Birthday*</label>
-      <div class="birthday">
-        <select id="birthMonth" name="birthMonth" required>
-          <option value="">Month</option>
+      <label for="birthMonth">Birthday</label>
+      <div class="dob-dropdowns">
+        <select id="birthMonth" required>
+          <option value="" disabled selected>Month</option>
           <option value="01">January</option>
           <option value="02">February</option>
           <option value="03">March</option>
@@ -40,24 +42,30 @@
           <option value="12">December</option>
         </select>
 
-        <select id="birthDay" name="birthDay" required>
-          <option value="">Day</option>
-          ${Array.from({ length: 31 }, (_, i) => `<option value="${i + 1}">${i + 1}</option>`).join('')}
+        <select id="birthDay" required>
+          <option value="" disabled selected>Day</option>
+          <!-- 1-31 options -->
+          ${Array.from({length: 31}, (_, i) => `<option value="${i+1}">${i+1}</option>`).join('')}
         </select>
       </div>
 
-      <label for="phone">Phone Number*</label>
-      <input type="tel" id="phone" name="phone" placeholder="Your digits for delicious updates" required>
+      <label for="phone">Phone Number</label>
+      <input type="tel" id="phone" placeholder="(555) 123-4567" required>
 
-      <div class="checkbox-group">
-        <input type="checkbox" id="textOptIn" name="textOptIn" required>
-        <label for="textOptIn">Yes, you can text me about hot Saver Sacks 🔥</label>
-      </div>
+      <label class="checkbox-group">
+        <input type="checkbox" id="textOptIn">
+        Yes, you can text me Saver Sack updates 📦
+      </label>
 
-      <button type="submit">Save & Snack On!</button>
+      <button type="submit">Save My Info 💾</button>
     </form>
   </div>
 
+  <!-- Scripts -->
+  <script src="https://www.gstatic.com/firebasejs/10.4.0/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.4.0/firebase-auth.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.4.0/firebase-firestore.js"></script>
+  <script src="firebase-config.js"></script>
   <script src="profile.js"></script>
 </body>
 </html>
