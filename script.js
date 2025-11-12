@@ -63,3 +63,19 @@ submitBtn.addEventListener("click", async () => {
     }
   }
 });
+// Google Sign-In
+import { GoogleAuthProvider, signInWithPopup } from "https://www.gstatic.com/firebasejs/10.6.0/firebase-auth.js";
+
+const googleButton = document.getElementById("google-signin");
+
+googleButton.addEventListener("click", async () => {
+  const provider = new GoogleAuthProvider();
+  try {
+    const result = await signInWithPopup(auth, provider);
+    const user = result.user;
+    alert(`Welcome, ${user.displayName}!`);
+    window.location.href = "home.html";
+  } catch (error) {
+    alert("Google Sign-In failed: " + error.message);
+  }
+});
