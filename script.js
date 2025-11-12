@@ -1,29 +1,29 @@
-// Firebase configuration
-const firebaseConfig = {
-  apiKey: "AIzaSyAP84C2DmnB193myPkWWAwqUKnhzUeg0",
-  authDomain: "mealsavers-f5dbf.firebaseapp.com",
-  projectId: "mealsavers-f5dbf",
-  storageBucket: "mealsavers-f5dbf.appspot.com",
-  messagingSenderId: "254383045667",
-  appId: "1:254383045667:web:0c7c309e4661c78c8b8596",
-  measurementId: "G-CXMP2L4FB6"
-};
+// Line 1: Firebase configuration is already set in firebase-config.js
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.5.2/firebase-app.js";
+import {
+  getAuth,
+  createUserWithEmailAndPassword,
+  signInWithEmailAndPassword
+} from "https://www.gstatic.com/firebasejs/10.5.2/firebase-auth.js";
+import { firebaseConfig } from "./firebase-config.js";
 
 // Initialize Firebase
-firebase.initializeApp(firebaseConfig);
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
 
-// Login/signup toggle logic
+// DOM elements
 document.addEventListener("DOMContentLoaded", function () {
-  const switchText = document.getElementById("switch-text");
   const nameField = document.getElementById("name");
+  const emailField = document.getElementById("email");
+  const passwordField = document.getElementById("password");
   const confirmPasswordField = document.getElementById("confirm-password");
   const submitButton = document.getElementById("submit-button");
-
+  const switchText = document.getElementById("switch-text");
   let isLogin = true;
 
+  // Toggle login/signup
   switchText.addEventListener("click", function () {
     isLogin = !isLogin;
-
     if (isLogin) {
       nameField.style.display = "none";
       confirmPasswordField.style.display = "none";
@@ -33,16 +33,46 @@ document.addEventListener("DOMContentLoaded", function () {
       nameField.style.display = "block";
       confirmPasswordField.style.display = "block";
       submitButton.textContent = "Sign Up";
-      switchText.textContent = "Already saved your first sack? Log back in 😎";
+      switchText.textContent = "Already signed up? Log in instead";
     }
   });
 
-  // Initial field visibility
-  nameField.style.display = "none";
-  confirmPasswordField.style.display = "none";
-
-  // Basic test
+  // Login or Sign Up
   submitButton.addEventListener("click", function () {
-    alert("Your script is working!");
+    const email = emailField.value.trim();
+    const password = passwordField.value;
+    const confirmPassword = confirmPasswordField.value;
+
+    if (!email || !password || (!isLogin && !confirmPassword)) {
+      alert("Please fill out all fields.");
+      return;
+    }
+
+    if (!isLogin) {
+      // Sign Up
+      if (password !== confirmPassword) {
+        alert("Passwords don’t match!");
+        return;
+      }
+
+      createUserWithEmailAndPassword(auth, email, password)
+        .then((userCredential) => {
+          alert("Sign-up successful! Redirecting to home...");
+          window.location.href = "home.html";
+        })
+        .catch((error) => {
+          alert("Error: " + error.message);
+        });
+    } else {
+      // Log In
+      signInWithEmailAndPassword(auth, email, password)
+        .then((userCredential) => {
+          alert("Login successful! Redirecting...");
+          window.location.href = "home.html";
+        })
+        .catch((error) => {
+          alert("Error: " + error.message);
+        });
+    }
   });
 });
