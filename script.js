@@ -1,78 +1,65 @@
-// Line 1: Firebase configuration is already set in firebase-config.js
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.5.2/firebase-app.js";
-import {
-  getAuth,
-  createUserWithEmailAndPassword,
-  signInWithEmailAndPassword
-} from "https://www.gstatic.com/firebasejs/10.5.2/firebase-auth.js";
+// Firebase config - already loaded in firebase-config.js
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.6.0/firebase-app.js";
+import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.6.0/firebase-auth.js";
 import { firebaseConfig } from "./firebase-config.js";
 
-// Initialize Firebase
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 
-// DOM elements
-document.addEventListener("DOMContentLoaded", function () {
-  const nameField = document.getElementById("name");
-  const emailField = document.getElementById("email");
-  const passwordField = document.getElementById("password");
-  const confirmPasswordField = document.getElementById("confirm-password");
-  const submitButton = document.getElementById("submit-button");
-  const switchText = document.getElementById("switch-text");
-  let isLogin = true;
+// Elements
+const nameInput = document.getElementById("name");
+const emailInput = document.getElementById("email");
+const passwordInput = document.getElementById("password");
+const confirmPasswordInput = document.getElementById("confirm-password");
+const submitBtn = document.getElementById("submit-button");
+const switchText = document.getElementById("switch-text");
 
-  // Toggle login/signup
-  switchText.addEventListener("click", function () {
-    isLogin = !isLogin;
-    if (isLogin) {
-      nameField.style.display = "none";
-      confirmPasswordField.style.display = "none";
-      submitButton.textContent = "Log In";
-      switchText.textContent = "New here? Create an account";
-    } else {
-      nameField.style.display = "block";
-      confirmPasswordField.style.display = "block";
-      submitButton.textContent = "Sign Up";
-      switchText.textContent = "Already signed up? Log in instead";
+let isLogin = true;
+
+// Toggle Login ↔ Sign Up
+switchText.addEventListener("click", () => {
+  isLogin = !isLogin;
+  submitBtn.textContent = isLogin ? "Log In" : "Sign Up";
+  switchText.textContent = isLogin ? "New here? Create an account" : "Already have an account? Log in";
+  nameInput.style.display = isLogin ? "none" : "block";
+  confirmPasswordInput.style.display = isLogin ? "none" : "block";
+});
+
+// Submit Button
+submitBtn.addEventListener("click", async () => {
+  const email = emailInput.value.trim();
+  const password = passwordInput.value.trim();
+  const name = nameInput.value.trim();
+  const confirmPassword = confirmPasswordInput.value.trim();
+
+  if (!email || !password) {
+    alert("Email and password are required.");
+    return;
+  }
+
+  if (!isLogin) {
+    if (!name) {
+      alert("Please enter your name.");
+      return;
     }
-  });
-
-  // Login or Sign Up
-  submitButton.addEventListener("click", function () {
-    const email = emailField.value.trim();
-    const password = passwordField.value;
-    const confirmPassword = confirmPasswordField.value;
-
-    if (!email || !password || (!isLogin && !confirmPassword)) {
-      alert("Please fill out all fields.");
+    if (password !== confirmPassword) {
+      alert("Passwords do not match.");
       return;
     }
 
-    if (!isLogin) {
-      // Sign Up
-      if (password !== confirmPassword) {
-        alert("Passwords don’t match!");
-        return;
-      }
-
-      createUserWithEmailAndPassword(auth, email, password)
-        .then((userCredential) => {
-          alert("Sign-up successful! Redirecting to home...");
-          window.location.href = "home.html";
-        })
-        .catch((error) => {
-          alert("Error: " + error.message);
-        });
-    } else {
-      // Log In
-      signInWithEmailAndPassword(auth, email, password)
-        .then((userCredential) => {
-          alert("Login successful! Redirecting...");
-          window.location.href = "home.html";
-        })
-        .catch((error) => {
-          alert("Error: " + error.message);
-        });
+    try {
+      await createUserWithEmailAndPassword(auth, email, password);
+      alert("Account created! Logging you in...");
+      window.location.href = "home.html";
+    } catch (error) {
+      alert("Error: " + error.message);
     }
-  });
+  } else {
+    try {
+      await signInWithEmailAndPassword(auth, email, password);
+      window.location.href = "home.html";
+    } catch (error) {
+      alert("Login failed: " + error.message);
+    }
+  }
 });
