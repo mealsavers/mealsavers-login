@@ -12,16 +12,18 @@ const firebaseConfig = {
 // Initialize Firebase
 firebase.initializeApp(firebaseConfig);
 
-// Handle login + sign-up toggle
+// Login/signup toggle logic
 document.addEventListener("DOMContentLoaded", function () {
   const switchText = document.getElementById("switch-text");
   const nameField = document.getElementById("name");
   const confirmPasswordField = document.getElementById("confirm-password");
   const submitButton = document.getElementById("submit-button");
+
   let isLogin = true;
 
   switchText.addEventListener("click", function () {
     isLogin = !isLogin;
+
     if (isLogin) {
       nameField.style.display = "none";
       confirmPasswordField.style.display = "none";
@@ -31,17 +33,15 @@ document.addEventListener("DOMContentLoaded", function () {
       nameField.style.display = "block";
       confirmPasswordField.style.display = "block";
       submitButton.textContent = "Sign Up";
-      switchText.textContent = "Already saved your first sack? Log back in!";
+      switchText.textContent = "Already saved your first sack? Log back in 😎";
     }
   });
 
-  // Show fields correctly on load
-  if (isLogin) {
-    nameField.style.display = "none";
-    confirmPasswordField.style.display = "none";
-  }
+  // Initial field visibility
+  nameField.style.display = "none";
+  confirmPasswordField.style.display = "none";
 
-  // Button click handler (not wired up to Firebase Auth yet)
+  // Basic test
   submitButton.addEventListener("click", function () {
     alert("Your script is working!");
   });
